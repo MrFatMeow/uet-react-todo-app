@@ -1,4 +1,5 @@
 import { Button } from "antd";
+import { useState } from "react";
 import { ComponentWrapper } from "./ComponentWrapper";
 import { Title } from "./Title";
 
@@ -29,6 +30,7 @@ export interface FormSettingProps {
   content?: {
     type: PageContentType;
     elements: FormElementProps[];
+    validations?: any;
   };
   footerExtra?: any[];
 }
@@ -42,6 +44,7 @@ interface FormBuilderProps {
 
 export const FormBuilder = (props: FormBuilderProps) => {
   const { formSettings, store, onStoreUpdate, onSubmit, onCancel } = props;
+  const [errors, setErrors] = useState<any>({});
   const {
     pageTitle,
     pageDescription,
@@ -52,7 +55,23 @@ export const FormBuilder = (props: FormBuilderProps) => {
     footerExtra = [],
   } = formSettings;
 
-  console.log("Store::", store);
+  const validationRules: any = {
+    string: (a: any, storeKey: any) => {
+      const storeValue = store[storeKey];
+      const ruleKeys = Object.keys(a);
+      ruleKeys.forEach((key: any) => {
+        const valueToValidate = a[key];
+        if (key === "min" && storeValue?.length < valueToValidate) {
+          setErrors({
+            ...errors,
+            [key]: false,
+          });
+        }
+      });
+    },
+  };
+
+  console.log("errors", errors);
 
   const handleOnChangeValue = (name: any, value: any) => {
     onStoreUpdate({
@@ -61,7 +80,19 @@ export const FormBuilder = (props: FormBuilderProps) => {
     });
   };
 
+  const checkValidation = () => {
+    const validationObj = formSettings.content?.validations;
+    const validationKeys = Object.keys(validationObj);
+    validationKeys.forEach((key) => {
+      const elementValidation = validationObj[key];
+      console.log("Validation::", elementValidation);
+      const elementRule = validationRules[elementValidation.type];
+      elementRule(elementValidation, key);
+    });
+  };
+
   const handleOnClickSubmit = () => {
+    checkValidation();
     onSubmit && onSubmit(store);
   };
 

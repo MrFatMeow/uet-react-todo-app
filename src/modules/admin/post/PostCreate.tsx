@@ -1,5 +1,6 @@
 import { Layout } from "antd";
 import { useState } from "react";
+import { isValidated } from "../../../constants/helper";
 import {
   FormBuilder,
   FormElementType,
@@ -13,7 +14,7 @@ const settings: FormSettingProps = {
   addNewText: "Create Article",
   showSecondaryButton: true,
   content: {
-    type: PageContentType.FORM,
+    type: PageContentType.LIST,
     elements: [
       {
         name: "title",
@@ -51,6 +52,12 @@ const settings: FormSettingProps = {
         },
       },
     ],
+    validations: {
+      title: {
+        type: "string",
+        min: 10,
+      },
+    },
   },
   footerExtra: [],
 };
@@ -64,6 +71,9 @@ export const PostCreate = () => {
         store={formState}
         onStoreUpdate={setFormState}
         formSettings={settings}
+        onSubmit={(values: any) => {
+         
+        }}
       />
     </Layout>
   );

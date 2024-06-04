@@ -11,6 +11,7 @@ export const ComponentWrapper = (props: ComponentWrapperProps) => {
   const { data, value, onChange } = props;
   const { type, label, customProps } = data;
 
+
   const elementRender = () => {
     let T = null;
 
