@@ -19,6 +19,15 @@ const settings: FormSettingProps = {
         name: "title",
         type: FormElementType.INPUT,
         label: "Post title",
+        validation: {
+          string: [
+            { minCharactersMustBe: 10, elseError: "Title must be at least 10 characters" },
+            { maxCharactersMustBe: 100, elseError: "Title must be at most 100 characters" },
+            { firstLetterMustBeUpperCase: true, elseError: "Title must start with an uppercase letter" }
+          ],
+          // In all cases, elseError is optional !
+          elseError: "Title must be a string",
+        },
         customProps: {
           placeHolder: "Enter Post Title",
         },
@@ -27,11 +36,32 @@ const settings: FormSettingProps = {
         name: "description",
         type: FormElementType.INPUT,
         label: "Post short description",
+        validation: {
+          string: [
+            { minCharactersMustBe: 10, elseError: "Description must be at least 10 characters" },
+            { maxCharactersMustBe: 200, elseError: "Description must be at most 200 characters" },
+            { firstLetterMustBeUpperCase: true, elseError: "Description must start with uppercase letter" },
+          ],
+          elseError: "Description must be a string"
+        }
       },
       {
         name: "content",
         type: FormElementType.INPUT,
         label: "Post content",
+        validation: {
+          number: [{
+            minMustBe: 1,
+            elseError: "Content, when being a number, must be at least 1",
+          }],
+          string: [{
+            minCharactersMustBe: 10,
+            elseError: "Content, when being a string, must be at least 10 characters",
+          }, {
+            firstLetterMustBeUpperCase: true,
+            elseError: "Content, when being a string, must start with an uppercase letter",
+          }],
+        }
       },
       {
         name: "status",
